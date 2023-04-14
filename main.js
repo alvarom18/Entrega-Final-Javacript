@@ -12,6 +12,8 @@ const rowProduct = document.querySelector(".row-product");
 const productsList = document.querySelector(".container-items");
 
 let allProducts = [];
+let valorTotal = document.querySelector(".total-pagar");
+let countProducts = document.querySelector("#contador-productos");
 
 productsList.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-add-cart")) {
@@ -22,14 +24,42 @@ productsList.addEventListener("click", (e) => {
       title: product.querySelector("h2").textContent,
       price: product.querySelector("p").textContent,
     };
-    allProducts = [...allProducts, infoProduct];
 
+    const exits = allProducts.some(
+      (product) => product.title === infoProduct.title
+    );
+
+    if (exits) {
+      const products = allProducts.map((product) => {
+        if (product.title === infoProduct.title) {
+          product.quantity++;
+          return product;
+        } else {
+          return product;
+        }
+      });
+      allProducts = [...products];
+    } else {
+      allProducts = [...allProducts, infoProduct];
+    }
+
+    showHTML();
+  }
+});
+
+rowProduct.addEventListener("click", (e) => {
+  if (e.target.classList.contains("icon-close")) {
+    const product = e.target.parentElement;
+    const title = product.querySelector("p").textContent;
+    allProducts = allProducts.filter((product) => product.title != title);
     showHTML();
   }
 });
 
 const showHTML = () => {
   rowProduct.innerHTML = "";
+  let total = 0;
+  let totalOfProducts = 0;
 
   allProducts.forEach((product) => {
     const containerProduct = document.createElement("div");
@@ -37,9 +67,9 @@ const showHTML = () => {
 
     containerProduct.innerHTML = `
         <div class="info-cart-product">
-            <span class="cantidad-producto-carrito">1</span>
-            <p class="titulo-producto-carrito">Samsung Galaxy S22</p>
-            <span class="precio-producto-carrito">$1000</span>
+            <span class="cantidad-producto-carrito">${product.quantity}</span>
+            <p class="titulo-producto-carrito">${product.title}</p>
+            <span class="precio-producto-carrito">${product.price}</span>
         </div>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -55,5 +85,10 @@ const showHTML = () => {
 		</svg>`;
 
     rowProduct.append(containerProduct);
+    total = total + parseInt(product.quantity * product.price.slice(1));
+    totalOfProducts = totalOfProducts + product.quantity;
   });
+
+  valorTotal.innerText = total;
+  countProducts.innerText = totalOfProducts;
 };
