@@ -18,10 +18,12 @@ let countProducts = document.querySelector("#contador-productos");
 productsList.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-add-cart")) {
     const product = e.target.parentElement;
-
+    localStorage.setItem("nombre", product.querySelector("h2").textContent);
+    let titulo = localStorage.getItem("nombre");
     const infoProduct = {
       quantity: 1,
-      title: product.querySelector("h2").textContent,
+      // title: product.querySelector("h2").textContent,
+      title: titulo,
       price: product.querySelector("p").textContent,
     };
 
