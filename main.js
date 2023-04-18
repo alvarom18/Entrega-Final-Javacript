@@ -1,3 +1,10 @@
+fetch(
+  "https://www.xataka.com/moviles/samsung-galaxy-s22-galaxy-s22-caracteristicas-precio-ficha-tecnica"
+).then((res) =>
+  console.log(res.json()).then((data) => {
+    console.log(data);
+  })
+);
 const btnCart = document.querySelector(".container-cart-icon");
 const containerCartProducts = document.querySelector(
   ".container-cart-products"
@@ -19,12 +26,13 @@ productsList.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-add-cart")) {
     const product = e.target.parentElement;
     localStorage.setItem("nombre", product.querySelector("h2").textContent);
-    let titulo = localStorage.getItem("nombre");
+    const titulo = localStorage.getItem("nombre");
+    localStorage.setItem("valor", product.querySelector("p").textContent);
+    const precio = localStorage.getItem("valor");
     const infoProduct = {
       quantity: 1,
-      // title: product.querySelector("h2").textContent,
       title: titulo,
-      price: product.querySelector("p").textContent,
+      price: precio,
     };
 
     const exits = allProducts.some(
